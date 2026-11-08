@@ -1,0 +1,172 @@
+.process-picker {
+  margin-bottom: 15px;
+}
+
+.process-picker-heading,
+.process-picker-filters,
+.process-categories,
+.selected-processes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.process-picker-heading,
+.process-picker-filters {
+  margin-bottom: 9px;
+}
+
+.process-picker-heading > strong {
+  color: var(--settings-text);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.process-picker-heading > span,
+.process-description small,
+.process-type,
+.process-picker-empty,
+.selected-processes > span,
+.process-picker-hint {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.process-picker-heading > button,
+.process-picker-filters > input {
+  margin-left: auto;
+}
+
+.process-picker-filters {
+  flex-wrap: wrap;
+}
+
+.process-picker-filters > input {
+  flex: 1;
+  min-width: 140px;
+}
+
+.process-categories {
+  gap: 2px;
+  border-radius: 8px;
+  background: var(--settings-input);
+  padding: 3px;
+}
+
+.process-categories button,
+.selected-processes button {
+  border-radius: 5px;
+  padding: 4px 7px;
+  color: var(--settings-text);
+  font-size: 10px;
+}
+
+.process-categories button:hover,
+.selected-processes button:hover:not(:disabled) {
+  background: var(--settings-hover);
+}
+
+.process-categories button[aria-pressed="true"] {
+  background: var(--settings-button);
+  color: var(--code-accent);
+  box-shadow: 0 1px 3px #0002;
+}
+
+.process-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-height: 172px;
+  min-height: 42px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--workspace);
+}
+
+.process-option {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 7px;
+  border-bottom: 1px solid var(--border);
+  padding: 7px 8px;
+  color: var(--settings-text);
+  text-align: left;
+}
+
+.process-option:hover:not(:disabled) {
+  background: var(--settings-hover);
+}
+.process-option.selected {
+  background: var(--code-active);
+}
+
+.process-checkbox {
+  display: grid;
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: #fff;
+  font-size: 10px;
+}
+
+.selected .process-checkbox {
+  background: var(--settings-accent);
+}
+
+.process-description {
+  min-width: 0;
+  flex: 1;
+}
+
+.process-description strong,
+.process-description small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.process-description strong {
+  font-size: 11px;
+  font-weight: 500;
+}
+.process-description small {
+  margin-top: 2px;
+  font-family: var(--mono);
+}
+.process-type {
+  font-size: 9px;
+}
+.process-picker-empty {
+  grid-column: 1 / -1;
+  padding: 10px;
+  text-align: center;
+}
+
+.process-picker-error {
+  padding: 7px 10px;
+  border-radius: 6px;
+  background: var(--settings-lock-surface);
+  color: var(--settings-lock-text);
+  font-size: 10px;
+}
+
+.selected-processes {
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.selected-processes button {
+  background: var(--code-active);
+}
+.selected-processes button span {
+  padding-left: 3px;
+  color: var(--muted);
+}
+.process-picker-hint {
+  margin-top: 8px;
+}

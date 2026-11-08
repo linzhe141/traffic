@@ -1,0 +1,137 @@
+.capture-setup {
+  padding: 18px 22px 22px;
+}
+.setup-panel-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.setup-panel-heading strong {
+  font-size: 12px;
+  font-weight: 600;
+}
+.setup-panel-heading > span {
+  color: #a1a2a9;
+  font-size: 10px;
+}
+.setup-panel-heading > button {
+  margin-left: auto;
+}
+.capture-mode-field {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+  color: #81828a;
+  font-size: 11px;
+}
+.capture-mode-field select {
+  flex: 1;
+  border: 1px solid #d6d6dc;
+  background: #fff;
+  color: #676a73;
+  border-radius: 5px;
+  padding: 6px 9px;
+}
+.capture-mode-notice {
+  color: #9a875b;
+  background: #fff9eb;
+  border: 1px solid #ebe2cc;
+  border-radius: 5px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  font-size: 10px;
+  line-height: 1.8;
+}
+.setup-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 15px;
+}
+.setup-fields label {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 7px;
+}
+.setup-fields label > span {
+  color: #81828b;
+  font-size: 10px;
+}
+.setup-fields i {
+  font-style: normal;
+  color: #b0b1b7;
+  font-size: 9px;
+}
+.setup-fields small {
+  color: #a7a9b2;
+  font-size: 9px;
+  line-height: 1.7;
+}
+.setup-help {
+  color: #ad9971;
+  font-size: 10px;
+  line-height: 1.8;
+  margin: 9px 0;
+}
+.setup-help code {
+  border: 1px solid #e3e3e8;
+  border-radius: 3px;
+  background: #fff;
+  padding: 1px 5px;
+  color: #7c8496;
+}
+.engine-state {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+}
+.engine-state strong {
+  color: #868995;
+  font-weight: 500;
+}
+.engine-state > .truncate {
+  color: #aeb0ba;
+  font: 9px var(--mono);
+}
+.certificate-setup {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #e0e0e5;
+}
+.certificate-setup > div:first-child {
+  flex: 1;
+  min-width: 0;
+}
+.certificate-setup strong {
+  color: #7f818e;
+  font-size: 11px;
+  font-weight: 500;
+}
+.certificate-setup p {
+  color: #a5a7b1;
+  font-size: 10px;
+  line-height: 1.8;
+  margin: 6px 0;
+}
+.certificate-setup small {
+  display: block;
+  color: #b0b2bc;
+  font-size: 9px;
+}
+.certificate-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.capture-setup .trust-button {
+  color: #5e84bf !important;
+  border-color: #d0def3 !important;
+  background: #f1f6ff !important;
+}

@@ -1,0 +1,136 @@
+.related-row.active {
+  background: #e2e3e6;
+}
+.related-row:hover:not(.active) {
+  background: #eeeeef;
+}
+.related-row {
+  border-bottom: 1px solid #ededee;
+}
+.info-section {
+  border: 1px solid #e1e1e4;
+  border-radius: 7px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.info-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  border-bottom: 1px solid #e8e8ea;
+  background: #fdfdfd;
+}
+.info-section h3 > span {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 400;
+  color: #9a9b9f;
+}
+.info-section dl {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr);
+  gap: 9px 15px;
+  padding: 14px;
+  font-size: 11px;
+}
+.info-section dt {
+  color: #929399;
+  overflow-wrap: anywhere;
+}
+.info-section dd {
+  color: #55575e;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.header-list {
+  font-family: var(--mono);
+  font-size: 10px !important;
+}
+.section-empty {
+  padding: 12px 14px;
+  font-size: 11px;
+}
+.body-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+}
+.body-heading strong {
+  font-weight: 600;
+}
+.body-heading > span {
+  color: #a3a4aa;
+  font-size: 10px;
+}
+.body-viewer pre {
+  margin-top: 12px;
+  border: 1px solid #e2e2e6;
+  border-radius: 6px;
+  min-height: 100px;
+  padding: 16px;
+  color: #606a7e;
+  background: #fafafb;
+  font: 11px/1.8 var(--mono);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.body-notice {
+  margin-top: 10px;
+  padding: 7px 10px;
+  border-radius: 4px;
+  background: #fff8e8;
+  color: #b4a16c;
+  font-size: 10px;
+}
+.capture-diagnostics {
+  height: 100%;
+  overflow: auto;
+  padding: 20px;
+  background: #fafafb;
+}
+.capture-diagnostics h2 {
+  font-size: 12px;
+  font-weight: 550;
+  color: #73757d;
+  margin-bottom: 8px;
+}
+.capture-diagnostics > p {
+  font-size: 10px;
+  color: #a0a2a9;
+  margin-bottom: 14px;
+}
+.diagnostic-list {
+  border: 1px solid #e5e5e9;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.diagnostic-row {
+  display: grid;
+  grid-template-columns: 90px 120px minmax(0, 1fr);
+  gap: 7px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #eaeaec;
+  color: #92959f;
+  font: 10px var(--mono);
+}
+.diagnostic-row p {
+  grid-column: 1 / -1;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font: 10px/1.7 var(--mono);
+}
+.diagnostic-row > span:last-of-type {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.capture-diagnostics > small {
+  display: block;
+  margin-top: 10px;
+  font-size: 9px;
+  color: #aeb0b8;
+}

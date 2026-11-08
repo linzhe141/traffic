@@ -1,0 +1,102 @@
+.traffic-table-scroll {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background: repeating-linear-gradient(to bottom, #fff 0, #fff 28px, #f5f5f6 28px, #f5f5f6 56px);
+}
+.traffic-table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  min-width: 1080px;
+  width: 100%;
+  font-size: 11px;
+}
+.traffic-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  height: 27px;
+  padding: 0 9px;
+  text-align: left;
+  font-weight: 500;
+  font-size: 10px;
+  color: #83858a;
+  border-bottom: 1px solid #dcdcdf;
+  background: linear-gradient(#fafafa, #f4f4f5);
+}
+.traffic-table th:not(:last-child)::after {
+  content: "";
+  float: right;
+  height: 12px;
+  margin-top: 1px;
+  border-right: 1px solid #e4e4e7;
+}
+.traffic-table th span {
+  color: #b0b1b6;
+  font-size: 10px;
+  margin-left: 3px;
+}
+.traffic-table td {
+  height: 28px;
+  padding: 0 9px;
+  border-bottom: 1px solid #ececee;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.traffic-table tbody tr {
+  background: #fff;
+}
+.traffic-table tbody tr:nth-child(even) {
+  background: #f5f5f6;
+}
+.traffic-table tbody tr:hover {
+  background: #eef2f8;
+}
+.traffic-table tbody tr.selected {
+  background: #3971dd;
+  color: #fff;
+}
+.traffic-table tbody tr.selected td {
+  border-color: #3971dd;
+}
+.traffic-table .sequence {
+  color: #8f9299;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.traffic-table td.numeric,
+.traffic-table th.numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.traffic-table .path-cell {
+  font-size: 10px;
+}
+.traffic-table .time-cell {
+  color: #92949b;
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+.traffic-table .selected .sequence,
+.traffic-table .selected .time-cell,
+.traffic-table .selected .status-pending {
+  color: #e3ebff;
+}
+.traffic-table .selected .method-badge {
+  color: #fff;
+  border-color: #ffffff60;
+  background: #ffffff20;
+}
+.table-empty {
+  position: sticky;
+  left: 0;
+  width: min(100%, 100vw);
+  padding-top: 35px;
+  font-size: 11px;
+  color: #a3a4aa;
+  background: transparent;
+}

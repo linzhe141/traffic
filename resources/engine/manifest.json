@@ -1,0 +1,9 @@
+{
+  "version": "12.3.1",
+  "platform": "win32",
+  "arch": "x64",
+  "executableName": "mitmdump.exe",
+  "archiveUrl": "https://downloads.mitmproxy.org/12.3.1/mitmproxy-12.3.1-windows-x86_64.zip",
+  "archiveSha256": "336c03e7215876af329f57c44b1b738cfb22cd29dc7cd4c0714f15c7648af829",
+  "executableSha256": "e2f05da6385d8c76c2f5b7b23b5d0f7e2c23483b5ece99fe1f4e3b0c04c5f8b5"
+}
