@@ -3,13 +3,18 @@
 ## 依赖方向
 
 ```text
-renderer -> preload TrafficApi -> typed IPC -> Runtime
-                                             |-- CaptureEngine -> mitmproxy adapter -> mitmdump CLI
-                                             |-- TrafficRepository -> memory
-Electron bootstrap -> 注入路径、证书、进程发现和系统代理能力
+renderer <-> preload TrafficApi <-> typed IPC <-> Electron Main
+                                                 |
+                                          JSON-RPC over stdio
+                                                 |
+                                              CLI serve
+                                                 |
+                                              Runtime
+                                              |-- CaptureEngine -> mitmproxy adapter -> mitmdump
+                                              |-- TrafficRepository -> memory
 ```
 
-`src/core` 不导入 Electron 或 `src/main`。`createCaptureEngine` 管理抓取生命周期、目标展开和系统代理租约；`createRuntime` 统一状态、订阅、诊断与仓储。主进程通过平台端口注入 Windows 功能，IPC 只映射 Runtime 方法。完整接口见 [CORE_API.md](CORE_API.md)。
+`createCaptureEngine` 管理抓取生命周期、目标展开和系统代理租约。`createRuntime` 统一状态、订阅、诊断与仓储。CLI 注入 Windows 功能，Electron Main 通过 fork 和标准流调用 CLI。 [Core API](CORE_API.md) · [CLI 协议](CLI_PROTOCOL.md)
 
 ## 桌面生命周期
 
@@ -21,7 +26,7 @@ Windows 使用 Window Controls Overlay 保留原生窗口按钮。renderer 通�
 
 Windows x64 内置官方 mitmproxy 12.3.1 独立版。Forge `generateAssets` 根据清单下载并校验引擎，`extraResource` 复制到 ASAR 外部。运行时依次查找 `MITMDUMP_PATH`、`resources/engine/<platform>-<arch>` 和系统 PATH；用户无需安装 Python。独立版首次启动会解压运行时，因此版本检查设置较长超时，并合并和缓存同一路径的检查。
 
-应用启动独立 mitmdump CLI，加载 `resources/mitm-addon`。addon 发布带会话 token 的 NDJSON 事件；Node 侧校验消息、限制大小并管理进程退出。请求、响应与错误通过稳定 ID 更新到仓储。正文预览和压缩解码都有容量上限，完整流量继续转发。
+Core 的 mitmproxy adapter 启动 mitmdump 并加载 `resources/mitm-addon`。addon 发布带会话 token 的 NDJSON 事件，adapter 校验消息并管理进程退出。请求、响应与错误通过稳定 ID 更新到仓储，正文存于 CLI 进程内存并按页读取。
 
 本地进程模式按可执行文件/PID 接入，保留真实名称大小写并扩展当前子进程。系统代理兼容模式显式备份、切换和恢复 Windows 当前用户设置，沿用原 HTTP(S) 代理作为上游。恢复文件保存所有者 PID，避免覆盖其他活跃实例或用户后来改动的设置。
 

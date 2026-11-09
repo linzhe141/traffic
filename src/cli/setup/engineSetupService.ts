@@ -1,4 +1,4 @@
-import { shell } from "electron";
+import type { EnginePaths } from "../../core";
 import type { EngineInfo } from "../../shared/contracts";
 import { normalizeErrorMessage } from "../../core/errors";
 import {
@@ -6,12 +6,14 @@ import {
   resolvePublicCertificate,
   trustPublicCertificate,
 } from "./certificateSetup";
-import { checkFileExists, resolveEnginePaths } from "./resolveEnginePaths";
+import { checkFileExists } from "./resolveEnginePaths";
 import { createEngineVersionReader } from "./createEngineVersionReader";
 import { detectLoopbackSystemProxy } from "./detectNetworkEnvironment";
-import { getSystemProxyUpstream } from "../systemProxy";
 
-export function createEngineSetupService() {
+export function createEngineSetupService(
+  resolveEnginePaths: () => Promise<EnginePaths>,
+  getSystemProxyUpstream: () => Promise<string | undefined>,
+) {
   const readEngineVersion = createEngineVersionReader();
   async function getEngineInfo(): Promise<EngineInfo> {
     const paths = await resolveEnginePaths();
@@ -46,13 +48,6 @@ export function createEngineSetupService() {
   }
   return {
     getEngineInfo,
-    async revealCertificate(): Promise<void> {
-      const { confdir } = await resolveEnginePaths();
-      const certificatePath = await resolvePublicCertificate(confdir);
-      if (!(await checkFileExists(certificatePath)))
-        throw new Error("Start capture once to generate the public CA certificate.");
-      shell.showItemInFolder(certificatePath);
-    },
     async trustCertificate(): Promise<EngineInfo> {
       const { confdir } = await resolveEnginePaths();
       const certificatePath = await resolvePublicCertificate(confdir);

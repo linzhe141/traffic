@@ -1,4 +1,3 @@
-import { app } from "electron";
 import { access } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { runBoundedCommand } from "./runBoundedCommand";
@@ -13,9 +12,10 @@ export async function checkFileExists(path: string): Promise<boolean> {
   }
 }
 
-export async function resolveEnginePaths(): Promise<EnginePaths> {
-  const root = app.isPackaged ? process.resourcesPath : app.getAppPath();
-  const resourceRoot = app.isPackaged ? root : join(root, "resources");
+export async function resolveEnginePaths(
+  resourceRoot: string,
+  dataDir: string,
+): Promise<EnginePaths> {
   const executableName = process.platform === "win32" ? "mitmdump.exe" : "mitmdump";
   let executablePath = process.env.MITMDUMP_PATH ? resolve(process.env.MITMDUMP_PATH) : "";
   if (!executablePath) {
@@ -40,6 +40,6 @@ export async function resolveEnginePaths(): Promise<EnginePaths> {
   return {
     executablePath,
     addonPath: join(resourceRoot, "mitm-addon", "addon.py"),
-    confdir: join(app.getPath("userData"), "mitmproxy"),
+    confdir: join(dataDir, "mitmproxy"),
   };
 }

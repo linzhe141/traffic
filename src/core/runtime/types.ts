@@ -15,7 +15,6 @@ export interface RuntimePlatformPorts {
   initialize?(): Promise<void>;
   getEngineInfo(): Promise<EngineInfo>;
   trustCertificate(): Promise<EngineInfo>;
-  revealCertificate(): Promise<void>;
   listProcesses(): Promise<DetectedProcess[]>;
 }
 type RuntimeEngineOptions =

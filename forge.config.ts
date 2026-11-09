@@ -8,7 +8,7 @@ import { prepareBundledEngine } from "./scripts/prepareBundledEngine";
 
 const config: ForgeConfig = {
   packagerConfig: {
-    asar: true,
+    asar: { unpack: "capture-cli.cjs" },
     ...(process.platform === "win32" ? { icon: resolve("local-traffic.ico") } : {}),
     // Avoid a final rename of freshly edited EXEs while Windows scans them.
     tmpdir: process.platform === "win32" ? false : resolve(".forge-tmp"),
@@ -34,6 +34,7 @@ const config: ForgeConfig = {
     new VitePlugin({
       build: [
         { entry: "src/main/index.ts", config: "vite.main.config.mts", target: "main" },
+        { entry: "src/cli/main.ts", config: "vite.cli.config.mts", target: "main" },
         { entry: "src/preload/index.ts", config: "vite.preload.config.mts", target: "preload" },
       ],
       renderer: [{ name: "main_window", config: "vite.renderer.config.mts" }],

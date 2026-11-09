@@ -7,11 +7,11 @@ import {
 } from "../../shared/contracts";
 import { validateInvokeInput } from "../../shared/validation";
 import { normalizeErrorMessage } from "../../core/errors";
-import type { Runtime } from "../../core";
+import type { DesktopRuntime } from "../bootstrap/createDesktopRuntime";
 import { readProcessIcon } from "../processes/readProcessIcon";
 
 export function registerTrafficHandlers(
-  runtime: Runtime,
+  runtime: DesktopRuntime,
   getWindow: () => BrowserWindow | null,
 ): () => void {
   const registeredChannels: (keyof InvokeContract)[] = [];

@@ -26,11 +26,11 @@ interface Runtime {
   stop(): Promise<CaptureStatus>;
   snapshot(): TrafficSnapshot;
   clear(): Promise<void>;
+  readBody(input: BodyPageRequest): BodyPage | null;
   onSnapshot(listener: (snapshot: TrafficSnapshot) => void): () => void;
   dispose(): Promise<void>;
   getEngineInfo(): Promise<EngineInfo>;
   trustCertificate(): Promise<EngineInfo>;
-  revealCertificate(): Promise<void>;
   listProcesses(): Promise<DetectedProcess[]>;
 }
 ```
@@ -49,12 +49,10 @@ interface Runtime {
 
 请求通过稳定 ID 更新，先发送 `pending`，结束后发送 `complete` 或 `failed`。清空后，在途请求的后续更新不会重新插入列表。快照包含递增 `revision`，供消费端丢弃过期数据。
 
-仓储目前保留最多 500 条请求、16 MiB 正文预览；快照按 100 ms 合并发布。持久化实现需要保持相同的清空与更新语义。若数据库采用异步读写，先扩展仓储契约和运行时，再接入适配器。
+仓储目前保留最多 500 条请求，正文按页读取，快照按 100 ms 合并发布。持久化实现需要保持相同的清空与更新语义。若数据库采用异步读写，先扩展仓储契约和运行时，再接入适配器。
 
-## Electron 接入
+## CLI 与 Electron 接入
 
-`src/main/bootstrap/createDesktopRuntime.ts` 是桌面组合入口，注入 Windows 进程发现、专用证书目录和系统代理适配器。`registerTrafficHandlers.ts` 只做 IPC 来源检查、输入校验和 Runtime 方法映射，不直接操作内核适配器或仓储。
+`src/cli/createCliRuntime.ts` 注入 Windows 进程发现、证书目录和系统代理适配器。`src/main/bootstrap/createDesktopRuntime.ts` 通过 `createCliServer` 调用 CLI 并接收快照，`registerTrafficHandlers.ts` 负责 IPC 来源检查、输入校验及桌面操作。 [CLI 协议](CLI_PROTOCOL.md)
 
-`src/main/index.ts` 只配置开发测试目录并启动桌面生命周期。窗口创建留在独立模块中。renderer 使用 preload 暴露的 `TrafficApi`，不直接导入内核。
-
-当前不维护测试设施；后续单测和 E2E 统一放在独立 `test/` 目录。
+`src/main/index.ts` 启动桌面生命周期。renderer 使用 preload 暴露的 `TrafficApi`。

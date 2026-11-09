@@ -1,4 +1,4 @@
-import type { CaptureOptions, InvokeContract } from "./contracts";
+import type { BodyPageRequest, CaptureOptions, InvokeContract } from "./contracts";
 import { normalizeCaptureTargets } from "./normalizeCaptureTargets";
 
 export function normalizeCaptureOptions(input: unknown): CaptureOptions {
@@ -45,6 +45,23 @@ export function normalizeCaptureOptions(input: unknown): CaptureOptions {
   return options;
 }
 
+export function normalizeBodyPageRequest(input: unknown): BodyPageRequest {
+  const value = input as Record<string, unknown> | null;
+  if (
+    !value ||
+    typeof value.id !== "string" ||
+    !value.id ||
+    value.id.length > 128 ||
+    (value.side !== "request" && value.side !== "response") ||
+    typeof value.offset !== "number" ||
+    !Number.isSafeInteger(value.offset) ||
+    value.offset < 0
+  ) {
+    throw new Error("正文读取参数无效。");
+  }
+  return { id: value.id, side: value.side, offset: value.offset };
+}
+
 export function validateInvokeInput<K extends keyof InvokeContract>(
   channel: K,
   input: unknown,
@@ -65,20 +82,7 @@ export function validateInvokeInput<K extends keyof InvokeContract>(
     return input as InvokeContract[K]["input"];
   }
   if (channel === "traffic:body") {
-    const value = input as Record<string, unknown> | null;
-    if (
-      !value ||
-      typeof value.id !== "string" ||
-      !value.id ||
-      value.id.length > 128 ||
-      (value.side !== "request" && value.side !== "response") ||
-      typeof value.offset !== "number" ||
-      !Number.isSafeInteger(value.offset) ||
-      value.offset < 0
-    ) {
-      throw new Error("正文读取参数无效。");
-    }
-    return { id: value.id, side: value.side, offset: value.offset } as InvokeContract[K]["input"];
+    return normalizeBodyPageRequest(input) as InvokeContract[K]["input"];
   }
   if (channel === "capture:start") {
     return normalizeCaptureOptions(input) as InvokeContract[K]["input"];

@@ -45,7 +45,6 @@ export function createRuntime(options: RuntimeOptions): Runtime {
     onSnapshot: (listener) => service.onSnapshot(listener),
     getEngineInfo: () => options.platform.getEngineInfo(),
     trustCertificate: () => options.platform.trustCertificate(),
-    revealCertificate: () => options.platform.revealCertificate(),
     listProcesses: () => options.platform.listProcesses(),
     dispose() {
       if (disposed) return Promise.resolve();

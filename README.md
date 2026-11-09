@@ -30,7 +30,7 @@ HTTPS 需要先生成应用专属 CA，并由用户显式信任。首次抓取�
 
 上游支持无认证 HTTP/HTTPS，暂不支持 SOCKS 和代理认证。VPN TUN 的兼容性取决于实际网络环境。
 
-请求和响应正文随会话记录存放在 Electron 主进程内存中。Body 和 Raw 滚动时按页读取，SSE 的 Messages 列表逐页解析完整事件。WebSocket 显示最近 64 条双向消息，每条预览前 1 KiB。其他非 HTTP 连接可在连接诊断里查看。
+请求和响应正文随会话记录存放在抓取 CLI 进程内存中。Body 和 Raw 滚动时按页读取，SSE 的 Messages 列表逐页解析完整事件。WebSocket 显示最近 64 条双向消息，每条预览前 1 KiB。其他非 HTTP 连接可在连接诊断里查看。
 
 ## 项目结构
 
@@ -39,7 +39,8 @@ HTTPS 需要先生成应用专属 CA，并由用户显式信任。首次抓取�
 - `src/core/runtime`、`storage`：状态、订阅和有界内存仓储。
 - `resources/mitm-addon`：由 mitmdump 加载的请求/响应事件及正文预览插件。
 - `resources/engine`：内置引擎、版本清单和许可证；大体积二进制由构建流程准备，不提交 Git。
-- `src/main`：桌面生命周期、窗口、IPC 和平台适配。
+- `src/cli`：独立抓取服务、JSON-RPC 业务协议和 Windows 平台适配。
+- `src/main`：桌面生命周期、窗口、IPC 以及 CLI 子进程连接。
 - `src/shared`、`src/preload`：类型契约、运行时参数校验和受限桥接。
 - `src/renderer`：Vue、Tailwind、Lucide、Reka UI；基础组件位于 `components/ui`。
 
@@ -49,12 +50,13 @@ HTTPS 需要先生成应用专属 CA，并由用户显式信任。首次抓取�
 
 ```powershell
 pnpm typecheck
+pnpm test:cli
 pnpm build
 pnpm make
 ```
 
 `build` 生成应用目录，`make` 生成 ZIP。Forge `extraResource` 将引擎与 addon 放在发行包的 resources 目录，位于 ASAR 外部。Windows x64 发行包不依赖目标机器的 Python 环境。
 
-当前不维护测试脚本或测试依赖。后续单测和 E2E 统一放入独立的 `test/` 目录。参考仓库、临时证书、截图、缓存和构建产物均排除在版本控制之外。
+`build:cli` 单独构建可由 Node.js 启动的 CLI，`test:cli` 验证独立进程的协议收发。参考仓库、临时证书、截图、缓存和构建产物均排除在版本控制之外。
 
-见 [Core API](docs/CORE_API.md)、[架构](docs/ARCHITECTURE.md)、[TODO](docs/TODO.md)、[ProxyPin 源码分析](docs/PROXYPIN-CORE.md)。
+见 [CLI 协议](docs/CLI_PROTOCOL.md)、[Core API](docs/CORE_API.md)、[架构](docs/ARCHITECTURE.md)、[TODO](docs/TODO.md)、[ProxyPin 源码分析](docs/PROXYPIN-CORE.md)。

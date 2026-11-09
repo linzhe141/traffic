@@ -13,8 +13,10 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "typecheck": "vue-tsc --noEmit",
-    "lint": "oxlint --vue-plugin src scripts forge.config.ts vite.main.config.mts vite.preload.config.mts vite.renderer.config.mts",
-    "format": "oxfmt src scripts forge.config.ts vite.main.config.mts vite.preload.config.mts vite.renderer.config.mts package.json tsconfig.json",
+    "build:cli": "vite build --config vite.cli.config.mts",
+    "test:cli": "pnpm build:cli && node --test tests/cli-protocol.test.mjs",
+    "lint": "oxlint --vue-plugin src scripts tests forge.config.ts vite.cli.config.mts vite.main.config.mts vite.preload.config.mts vite.renderer.config.mts",
+    "format": "oxfmt src scripts tests forge.config.ts vite.cli.config.mts vite.main.config.mts vite.preload.config.mts vite.renderer.config.mts package.json tsconfig.json",
     "format:check": "pnpm format --check"
   },
   "dependencies": {

@@ -1,12 +1,11 @@
 import { app, dialog, type BrowserWindow } from "electron";
 import { createWindow } from "../createWindow";
 import { registerTrafficHandlers } from "../ipc/registerTrafficHandlers";
-import { createDesktopRuntime } from "./createDesktopRuntime";
-import type { Runtime } from "../../core";
+import { createDesktopRuntime, type DesktopRuntime } from "./createDesktopRuntime";
 let mainWindow: BrowserWindow | null = null;
 let shutdownComplete = false;
 let shutdownPromise: Promise<unknown> | undefined;
-let runtime: Runtime;
+let runtime: DesktopRuntime;
 let unregisterHandlers: (() => void) | undefined;
 
 function openWindow(): void {
@@ -31,8 +30,8 @@ export function startDesktopApplication(): void {
   void app.whenReady().then(async () => {
     await runtime.initialize().catch((error: unknown) => {
       dialog.showErrorBox(
-        "系统代理恢复失败",
-        error instanceof Error ? error.message : "请检查 Windows 系统代理设置。",
+        "抓取 CLI 初始化失败",
+        error instanceof Error ? error.message : "请检查抓取引擎及系统代理设置。",
       );
     });
     unregisterHandlers = registerTrafficHandlers(runtime, () => mainWindow);
