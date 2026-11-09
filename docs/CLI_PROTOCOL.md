@@ -4,7 +4,7 @@ CLI 可以由 Electron Main、Node.js 服务或本地 agent 启动。调用方�
 
 ```powershell
 pnpm build:cli
-node .vite/build/capture-cli.cjs serve --resources .\resources --data .\tmp\capture-cli
+node apps/cli/.vite/build/capture-cli.cjs serve --resources .\resources --data .\tmp\capture-cli
 ```
 
 `--resources` 指向包含 `engine` 和 `mitm-addon` 的目录。`--data` 保存 CA、引擎临时文件和系统代理恢复记录。每个桌面实例应沿用自己的数据目录，以便重启后恢复代理设置。
@@ -25,7 +25,7 @@ stdin 和 stdout 使用 UTF-8 NDJSON，每行一个 [JSON-RPC 2.0](https://www.j
 | 方法 | 参数 | 结果 |
 | --- | --- | --- |
 | `core.initialize` | `{ protocolVersion: 1 }` | 协议版本。初始化时尝试恢复遗留代理租约 |
-| `capture.start` | `{ port, mode?, target?, upstreamProxy? }` | 抓取状态 |
+| `capture.start` | `{ port, mode?, target?, upstreamProxy? }`。默认 `local`，须提供进程名或 PID。使用 `system-proxy` 时可以省略 `target`，提供时仅接受 PID。 | 抓取状态 |
 | `capture.stop` | `{}` | 停止后的抓取状态 |
 | `capture.snapshot` | `{}` | 包含状态、请求、诊断和递增 revision 的快照 |
 | `capture.clear` | `{}` | `null` |
@@ -41,4 +41,4 @@ stdin 和 stdout 使用 UTF-8 NDJSON，每行一个 [JSON-RPC 2.0](https://www.j
 
 解析失败、无效请求、未知命令和无效参数使用标准错误码。业务执行失败使用 `-32000`，版本不匹配使用 `-32001`，缺少初始化使用 `-32002`，正在退出使用 `-32003`。正常关闭优先发送 `core.dispose`，stdin 关闭也会触发清理。
 
-类型定义位于 `src/cli/protocol.ts`。证书文件夹、剪贴板及进程图标等桌面操作由 Electron Main 处理。
+类型定义位于 `packages/protocol/src/index.ts`。证书文件夹、剪贴板及进程图标等桌面操作由 Electron Main 处理。

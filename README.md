@@ -34,15 +34,14 @@ HTTPS 需要先生成应用专属 CA，并由用户显式信任。首次抓取�
 
 ## 项目结构
 
-- `src/core/index.ts`：统一 `createCaptureEngine` / `createRuntime` 入口。
-- `src/core/engines`、`adapters/mitmproxy`：抓取编排及可替换后端。
-- `src/core/runtime`、`storage`：状态、订阅和有界内存仓储。
+- `apps/cli`：独立抓取服务、JSON-RPC 服务端和 Windows 平台适配。
+- `apps/desktop`：Electron 主进程、preload、Vue 工作区和 Forge 打包配置。
+- `packages/core`：抓取生命周期、mitmproxy 适配、状态订阅和内存仓储。
+- `packages/protocol`：共享类型、JSON-RPC 契约、校验和 NDJSON 传输。
 - `resources/mitm-addon`：由 mitmdump 加载的请求/响应事件及正文预览插件。
 - `resources/engine`：内置引擎、版本清单和许可证；大体积二进制由构建流程准备，不提交 Git。
-- `src/cli`：独立抓取服务、JSON-RPC 业务协议和 Windows 平台适配。
-- `src/main`：桌面生命周期、窗口、IPC 以及 CLI 子进程连接。
-- `src/shared`、`src/preload`：类型契约、运行时参数校验和受限桥接。
-- `src/renderer`：Vue、Tailwind、Lucide、Reka UI；基础组件位于 `components/ui`。
+
+这是一个 pnpm workspace。内部依赖通过 `workspace:*` 引用，Core 和 Protocol 直接导出 TypeScript，由 CLI 或桌面的 Vite 入口打包。
 
 记录和正文只保存在内存中。停止抓取后可以继续查看，清空或关闭应用会释放数据。
 
@@ -55,8 +54,8 @@ pnpm build
 pnpm make
 ```
 
-`build` 生成应用目录，`make` 生成 ZIP。Forge `extraResource` 将引擎与 addon 放在发行包的 resources 目录，位于 ASAR 外部。Windows x64 发行包不依赖目标机器的 Python 环境。
+`build` 生成应用目录，`make` 生成 ZIP，产物位于 `apps/desktop/out`。Forge `extraResource` 将引擎与 addon 放在发行包的 resources 目录，位于 ASAR 外部。Windows x64 发行包不依赖目标机器的 Python 环境。
 
-`build:cli` 单独构建可由 Node.js 启动的 CLI，`test:cli` 验证独立进程的协议收发。参考仓库、临时证书、截图、缓存和构建产物均排除在版本控制之外。
+`build:cli` 生成可由 Node.js 启动的 `apps/cli/.vite/build/capture-cli.cjs`，`test:cli` 验证独立进程的协议收发。参考仓库、临时证书、截图、缓存和构建产物均排除在版本控制之外。
 
 见 [CLI 协议](docs/CLI_PROTOCOL.md)、[Core API](docs/CORE_API.md)、[架构](docs/ARCHITECTURE.md)、[TODO](docs/TODO.md)、[ProxyPin 源码分析](docs/PROXYPIN-CORE.md)。

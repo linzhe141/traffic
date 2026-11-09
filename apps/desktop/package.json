@@ -1,0 +1,39 @@
+{
+  "name": "local-traffic",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A personal local HTTP traffic inspector",
+  "license": "UNLICENSED",
+  "author": "Local Traffic",
+  "main": ".vite/build/main.js",
+  "exports": "./src/main/index.ts",
+  "scripts": {
+    "start": "electron-forge start",
+    "dev": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
+  },
+  "dependencies": {
+    "@lucide/vue": "^1.70.0",
+    "@shikijs/langs": "^4.6.0",
+    "@shikijs/themes": "^4.6.0",
+    "reka-ui": "^2.11.0",
+    "shiki": "^4.6.0",
+    "vue": "^3.5.0",
+    "vue-router": "^4.6.4"
+  },
+  "devDependencies": {
+    "@local-traffic/cli": "workspace:*",
+    "@local-traffic/protocol": "workspace:*",
+    "@electron-forge/cli": "8.0.1",
+    "@electron-forge/maker-zip": "8.0.1",
+    "@electron-forge/plugin-vite": "8.0.1",
+    "@electron-forge/shared-types": "8.0.1",
+    "@tailwindcss/vite": "^4.3.4",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "electron": "^45.2.3",
+    "extract-zip": "2.0.1",
+    "tailwindcss": "^4.3.4",
+    "vite": "^8.3.6"
+  }
+}

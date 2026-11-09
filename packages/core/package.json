@@ -1,0 +1,8 @@
+{
+  "name": "@local-traffic/core",
+  "private": true,
+  "exports": "./src/index.ts",
+  "dependencies": {
+    "@local-traffic/protocol": "workspace:*"
+  }
+}

@@ -14,7 +14,7 @@ renderer <-> preload TrafficApi <-> typed IPC <-> Electron Main
                                               |-- TrafficRepository -> memory
 ```
 
-`createCaptureEngine` 管理抓取生命周期、目标展开和系统代理租约。`createRuntime` 统一状态、订阅、诊断与仓储。CLI 注入 Windows 功能，Electron Main 通过 fork 和标准流调用 CLI。 [Core API](CORE_API.md) · [CLI 协议](CLI_PROTOCOL.md)
+`createCaptureEngine` 管理抓取生命周期、目标展开和系统代理租约。`createRuntime` 对外提供状态和订阅，内部由 `trafficSession` 维护记录、正文和诊断。CLI 注入 Windows 功能，Electron Main 通过 fork 和标准流调用 CLI，双方共用 `@local-traffic/protocol`。 [Core API](CORE_API.md) · [CLI 协议](CLI_PROTOCOL.md)
 
 ## 桌面生命周期
 
@@ -34,9 +34,16 @@ CA 位于应用 userData，公开证书通过受限 IPC 查看或显式信任。
 
 ## IPC 与状态
 
-共享 `InvokeContract` 绑定 channel、input、output；main 校验输入和发送方，preload 只暴露具名 `TrafficApi`。renderer 不直接访问 Node、socket 或仓储。
+`packages/protocol/src/contracts.ts` 定义抓取配置、流量记录和快照等数据。`apps/desktop/src/shared/desktopApi.ts` 定义桌面接口，`InvokeContract` 绑定通道和输入输出，main 校验输入和发送方，preload 暴露具名 `TrafficApi`。renderer 不直接访问 Node、socket 或仓储。
 
-服务层串行处理 start/stop，合并快照通知。快照 revision 用于丢弃旧消息。仓储限制历史条数和正文容量；清空后，旧的在途请求不能重新插入列表。
+服务层串行处理 start/stop，合并快照通知。Main 检查随应用发布的 CLI 的协议版本和消息外层结构，抓取记录的字段在引擎事件进入应用时校验。renderer 按快照 revision 丢弃旧消息。仓储限制历史条数和预览容量，淘汰记录时同步释放完整正文。清空后，在途请求的后续事件不会重新插入列表。Renderer 的抓取控制和列表筛选分别由 `useCaptureControls` 和 `useTrafficList` 管理，请求详情由 Vue Router 管理导航历史。
+
+## 界面模块
+
+- `renderer/views/TrafficWorkspace.vue` 组装工作区布局、路由选中项和功能模块。
+- `renderer/capture/` 放抓取控制、证书设置和目标选择。
+- `renderer/traffic/` 放列表、筛选和诊断。它的 `inspector/` 子目录负责请求详情、正文和流式响应。
+- `renderer/components/` 放导航、进程图标和通用 UI 组件。
 
 ## 持久化预留
 

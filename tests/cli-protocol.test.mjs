@@ -12,7 +12,7 @@ test("standalone CLI speaks JSON-RPC and disposes cleanly", { timeout: 20_000 },
   const child = spawn(
     process.execPath,
     [
-      resolve(".vite/build/capture-cli.cjs"),
+      resolve("apps/cli/.vite/build/capture-cli.cjs"),
       "serve",
       "--resources",
       resolve("resources"),
@@ -55,8 +55,14 @@ test("standalone CLI speaks JSON-RPC and disposes cleanly", { timeout: 20_000 },
     send(4, "capture.readBody", { id: "不存在", side: "response", offset: 0 });
     send(5, "capture.start", { port: 0 });
     send(6, "does.not.exist");
+    send("local-target", "capture.start", { port: 9090 });
+    send("system-target", "capture.start", {
+      port: 9090,
+      mode: "system-proxy",
+      target: "chrome.exe",
+    });
     const responses = new Map();
-    while (responses.size < 4) {
+    while (responses.size < 6) {
       const response = await next();
       responses.set(response.id, response);
     }
@@ -64,6 +70,8 @@ test("standalone CLI speaks JSON-RPC and disposes cleanly", { timeout: 20_000 },
     assert.equal(responses.get(4).result, null);
     assert.equal(responses.get(5).error.code, -32602);
     assert.equal(responses.get(6).error.code, -32601);
+    assert.equal(responses.get("local-target").error.code, -32602);
+    assert.equal(responses.get("system-target").error.code, -32602);
 
     send(7, "core.dispose");
     assert.deepEqual(await next(), { jsonrpc: "2.0", id: 7, result: null });

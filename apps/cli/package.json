@@ -1,0 +1,15 @@
+{
+  "name": "@local-traffic/cli",
+  "private": true,
+  "exports": "./src/main.ts",
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@local-traffic/core": "workspace:*",
+    "@local-traffic/protocol": "workspace:*"
+  },
+  "devDependencies": {
+    "vite": "^8.3.6"
+  }
+}

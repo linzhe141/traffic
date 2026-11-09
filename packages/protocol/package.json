@@ -1,0 +1,9 @@
+{
+  "name": "@local-traffic/protocol",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./validation": "./src/validation.ts",
+    "./transport": "./src/transport/ndjson.ts"
+  }
+}
