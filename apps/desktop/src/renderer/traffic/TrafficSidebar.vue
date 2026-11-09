@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Globe2, AppWindow, CircleSlash } from "@lucide/vue";
+import { version } from "../../../package.json";
 import ProcessIcon from "../components/ProcessIcon.vue";
 defineProps<{
   total: number;
@@ -92,7 +93,7 @@ defineEmits<{
       class="flex h-7 shrink-0 items-center border-t border-black/5 px-4 text-[9px] text-neutral-400"
     >
       In-memory session
-      <span class="ml-auto">v0.1</span>
+      <span class="ml-auto">v{{ version }}</span>
     </div>
   </aside>
 </template>

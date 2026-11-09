@@ -1,0 +1,59 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v[0-9]*"
+      - "[0-9]*"
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    name: Build and release Windows x64
+    runs-on: windows-2025
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Check release version
+        shell: pwsh
+        run: |
+          $version = (Get-Content apps/desktop/package.json -Raw | ConvertFrom-Json).version
+          $tagVersion = $env:GITHUB_REF_NAME -creplace '^v', ''
+          if ($tagVersion -cne $version) {
+            throw "Tag $env:GITHUB_REF_NAME does not match desktop version $version."
+          }
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm make --arch=x64
+
+      - name: Publish GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = $env:GITHUB_REF_NAME
+          $assets = @(Get-ChildItem apps/desktop/out/make -Recurse -File -Filter '*.zip' |
+            Select-Object -ExpandProperty FullName)
+          if ($assets.Count -eq 0) {
+            throw 'Electron Forge did not produce a ZIP.'
+          }
+
+          $options = @('--verify-tag', '--generate-notes', '--title', $tag)
+          if ($tag -match '^[^+]+-') {
+            $options += '--prerelease'
+          }
+          gh release create $tag @options @assets

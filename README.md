@@ -58,4 +58,15 @@ pnpm make
 
 `build:cli` 生成可由 Node.js 启动的 `apps/cli/.vite/build/capture-cli.cjs`，`test:cli` 验证独立进程的协议收发。参考仓库、临时证书、截图、缓存和构建产物均排除在版本控制之外。
 
+## 发版
+
+将包含 workflow 的提交推送到 GitHub，然后在该提交上创建并推送版本 tag。tag 须匹配 `apps/desktop/package.json` 中的版本，可以带 `v` 前缀。当前版本的发版命令如下。
+
+```powershell
+git tag v0.0.1-test.1
+git push origin v0.0.1-test.1
+```
+
+GitHub Actions 会构建 Windows x64 ZIP 并上传到该 tag 对应的 Release。带预发行后缀的版本会标记为 Prerelease。
+
 见 [CLI 协议](docs/CLI_PROTOCOL.md)、[Core API](docs/CORE_API.md)、[架构](docs/ARCHITECTURE.md)、[TODO](docs/TODO.md)、[ProxyPin 源码分析](docs/PROXYPIN-CORE.md)。
